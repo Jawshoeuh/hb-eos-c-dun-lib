@@ -1,0 +1,178 @@
+hb-dun-lib:
+  versions:
+    - EU
+    - NA
+  functions:
+      - name: IsCoordinateValid
+        description: |-
+          Returns whether or not the passed cordinates are valid. Inlined.
+          
+          r0: x
+          r1: y
+          
+          return: bool
+      - name: IsAreaValid
+        description: |-
+          Returns whether or not the passed area is valid. Inlined.
+          
+          r0: x0
+          r1: y0
+          r2: x1
+          r3: y1
+          
+          return: bool
+      - name: DoesAreaOverlap
+        description: |-
+          Returns whether or not the two areas (area A and area B) overlap. Inlined.
+          
+          r0: x0a
+          r1: y0a
+          r2: x1a
+          r3: y1a
+          sp+0x0: x0b
+          sp+0x4: y0b
+          sp+0x8: x1b
+          sp+0xC: y1b
+          
+          return: bool
+      - name: IsCoordinateInArea
+        description: |-
+          Returns whether or not the the point is inside the area. Inlined.
+          
+          r0: x
+          r1: y
+          r2: x0
+          r3: y0
+          sp+0x0: x1
+          sp+0x4: y1
+          
+          return: bool
+      - name: IsCoordinateInArea
+        description: |-
+          Returns whether or not the the point is inside the area. Inlined.
+          
+          r0: x
+          r1: y
+          r2: x0
+          r3: y0
+          sp+0x0: x1
+          sp+0x4: y1
+          
+          return: bool
+      - name: IsDirectionCardinal
+        description: |-
+          Returns whether or not the the direction is cardinal. Inlined.
+          
+          r0: direction
+          
+          return: bool
+      - name: MakeDirectionCardinal
+        description: |-
+          If the direction passed is cardinal, returns the same direction. Otherwise, returns one adjacent to the
+          non-cardinal direction. Inlined.
+          
+          r0: direction
+          
+          return: direction
+      - name: MakeDirectionDiagonal
+        description: |-
+          If the direction passed is diagonal, returns the same direction. Otherwise, returns one adjacent to the
+          non-diagonal direction. Inlined.
+          
+          r0: direction
+          
+          return: direction
+      - name: RandomCardinalDirection
+        description: |-
+          Generates a random cardinal direction. Inlined.
+          
+          return: direction
+      - name: RandomDiagonalDirection
+        description: |-
+          Generates a random diagonal direction. Inlined.
+          
+          return: direction
+      - name: CalcActualRoomDensity
+        description: |-
+          If the given room density is negative, use the absolute value instead. Otherwise, add 0-2 to the give room
+          density. Then, clamps the room density to 2 (min) and 30 (max).
+          
+          r0: room density
+          
+          return: room density
+      - name: CreateRoomInCell
+        description: |-
+          Creates a room at the corresponding coordinates and updates the cell with that information accordingly.
+          Written in Assembly.
+          
+          r0: x0 coordinate of the upper left corner (inclusive)
+          r1: y0 coordinate of the upper left corner (inclusive)
+          r2: x1 coordinate of the lower right corner (exclusive)
+          r3: y1 coordinate of the lower right corner (exclusive)
+          sp+0x0: # of the room
+          sp+0x4: Pointer to cell to update.
+          sp+0x8: room bitflags; only uses bit 2 (mask: 0b100), for room imperfections
+      - name: MergeRoomsHorizontally
+        description: |-
+          Merges two horizontal adjacent rooms into one larger room.
+          Written in Assembly.
+          
+          r0: x grid coordinate of the rooms to merge
+          r1: y grid coordinate of the upper room
+          r2: dx, where the second room has a x grid coordinate of x+dx
+          r3: grid to update
+      - name: GenerateRecursiveBacktrackingFloor
+        description: |-
+          Generates a recursive backtracking maze across the floor and places 4-15 3x3 rooms (depending on room
+          density). Note: GenerateRecursiveBacktrackingMaze uses a lot of stack space and can cause a stack overflow.
+          It has been tested within this function (and uses a little stack trick). Because of this issue, the
+          GenerateRecursiveBacktrackingMaze function has been hidden from the users of this library. If the function
+          is desired to be used (despite its flaws), view the library source code and extract the function.
+          Written in Assembly.
+          
+          r0: floor_properties
+      - name: GenerateBinaryTreeMaze
+        description: |-
+          Generates a binary tree maze in the area defined by (x0, y0) -> [x1, y1] with a bias for the diagonal
+          direction passed into the function. If the direction is cardinal, the function makes it diagonal by
+          randomly selecting a diagonal direction adjacent to the cardinal one.
+          
+          r0: x0
+          r1: y0
+          r2: x1
+          r3: y1
+          sp+0x0: direction (expected to be diagonal; however, if not uses a random adjacent diagonal direction)
+      - name: GenerateBinaryTreeFloor
+        description: |-
+          Generates a binary tree maze at (7, 7) -> [24, 24] using a random diagonal direction. Then, it adds a 3x3
+          spawn room in the directional bias corner, two rooms (one for each adjacet cardinal direction), and a 3x3
+          room for the stairs in the corner opposite of the bias. If easy solution is true, the stair location and
+          team spawn location is flipped around (making reaching the stairs significantly easier).
+          
+          r0: x0
+          r1: y0
+          r2: x1
+          r3: y1
+          sp+0x0: bool easy_solution
+      - name: GenerateSidewinderMaze
+        description: |-
+          Generates a sidewinder maze in the area defined by (x0, y0) -> [x1, y1] with a bias for the cardinal
+          direction passed into the function. If the direction is diagonal, the function makes it cardinal by
+          randomly selecting a cardinal direction adjacent to the diagonal one.
+          
+          r0: x0
+          r1: y0
+          r2: x1
+          r3: y1
+          sp+0x0: direction (expected to be cardinal; however, if not uses a random adjacent cardinal)
+      - name: GenerateSidewinderFloor
+        description: |-
+          Generates a sidewinder maze and places two rooms along the axis of the randomly selected cardinal direction.
+          The player is forced to spawn on one side and the stairs on the other side. If hard solution is true, the
+          stair location and team spawn location is flipped around (making reachint the stairs significantly harder).
+          
+          r0: x0
+          r1: y0
+          r2: x1
+          r3: y1
+          sp+0x0: bool hard_solution
