@@ -8,6 +8,8 @@
 #define HB_GRID_COLS 15
 #define HB_X_POS 0
 #define HB_Y_POS 1
+#define HB_DUNGEON_GRID_CELL_BYTES sizeof(struct dungeon_grid_cell)
+#define HB_DUNGEON_GRID_COLUMN_BYTES sizeof(struct dungeon_grid_cell) * 15
 
 
 struct abstract_tile {
@@ -16,8 +18,8 @@ struct abstract_tile {
     bool room_blocked : 1;
     bool x_connect_blocked : 1;
     bool y_connect_blocked : 1;
-    bool custom_tile_info_1 : 1;
-    bool custom_tile_info_2 : 1;
+    bool item_spawn : 1;
+    bool custom_tile_info : 1;
 };
 ASSERT_SIZE(struct abstract_tile, 1);
 
