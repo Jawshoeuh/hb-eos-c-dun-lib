@@ -314,7 +314,7 @@ bool TryCarveAbstractTileSafe(const int16_t x, const int16_t y, struct abstract_
                 abs_floor->tiles[x + 1][y - 1].x_connect_blocked = true;
             }
         }   
-    } else if (DIR_UP == dir || DIR_DOWN == dir) {
+    } else { // (DIR_UP == dir || DIR_DOWN == dir) {
         if (HB_DUNGEON_MAX_X - 1 > x) {
             abs_floor->tiles[x + 1][y].y_connect_blocked = true;
             if (DIR_UP == dir && 0 < y) {
@@ -892,6 +892,7 @@ void GenerateBinaryTreeMaze(const int16_t x0, const int16_t y0, const int16_t x1
         }
     }
 }
+
 /* Original Assembly Function Was Rewritten For hb-eos-c-dun-lib however, it
    has been left in the codebase commented out to show the original
    implementation.
@@ -1205,7 +1206,7 @@ void GenerateBinaryTreeFloor(struct floor_properties *floor_props, bool easy_sol
         CreateRoomInCell(7, 23, 22, 28, 1, &grid[0], floor_props->room_flags);
         CreateRoomInCell(23, 7, 28, 22, 2, &grid[1], floor_props->room_flags);
         CreateRoomInCell(25, 25, 28, 28, 3, &grid[1], floor_props->room_flags);
-        for (int i = 24; i >= 22; i--) {
+        for (int i = 24; 22 <= i; i--) {
             tile = GetTile(i, 27);
             tile->terrain_type = TERRAIN_NORMAL;
             tile = GetTile(27, i);
@@ -1220,7 +1221,7 @@ void GenerateBinaryTreeFloor(struct floor_properties *floor_props, bool easy_sol
         CreateRoomInCell(3, 7, 8, 22, 1, &grid[0], floor_props->room_flags);
         CreateRoomInCell(9, 23, 24, 28, 2, &grid[1], floor_props->room_flags);
         CreateRoomInCell(3, 25, 6, 28, 3, &grid[1], floor_props->room_flags);
-        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; 3 > i; ++i) {
             tile = GetTile(3, 22 + i);
             tile->terrain_type = TERRAIN_NORMAL;
             tile = GetTile(6 + i, 27);
@@ -1235,7 +1236,7 @@ void GenerateBinaryTreeFloor(struct floor_properties *floor_props, bool easy_sol
         CreateRoomInCell(7, 3, 22, 8, 1, &grid[0], floor_props->room_flags);
         CreateRoomInCell(23, 9, 28, 24, 2, &grid[1], floor_props->room_flags);
         CreateRoomInCell(25, 3, 28, 6, 3, &grid[1], floor_props->room_flags);
-        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; 3 > i; ++i) {
             tile = GetTile(22 + i, 3);
             tile->terrain_type = TERRAIN_NORMAL;
             tile = GetTile(27, 6 + i);
@@ -1250,7 +1251,7 @@ void GenerateBinaryTreeFloor(struct floor_properties *floor_props, bool easy_sol
         CreateRoomInCell(3, 9, 8, 24, 1, &grid[0], floor_props->room_flags);
         CreateRoomInCell(9, 3, 24, 8, 2, &grid[1], floor_props->room_flags);
         CreateRoomInCell(3, 3, 6, 6, 3, &grid[1], floor_props->room_flags);
-        for (int i = 6; i < 9; i++) {
+        for (int i = 6; 9 > i; i++) {
             tile = GetTile(i, 3);
             tile->terrain_type = TERRAIN_NORMAL;
             tile = GetTile(3, i);
@@ -1292,7 +1293,7 @@ void GenerateSidewinderFloor(struct floor_properties *floor_props, bool hard_sol
         CreateRoomInCell(6, 2, 27, 7, 0, &grid[0], floor_props->room_flags);
         CreateRoomInCell(6, 24, 27, 29, 1, &grid[1], floor_props->room_flags);
         spawn_x = DungeonRandRange(6, 27);
-    } else {
+    } else { // (DIR_RIGHT == dir || DIR_LEFT == dir)
         CreateRoomInCell(2, 6, 7, 27, 0, &grid[0], floor_props->room_flags);
         CreateRoomInCell(24, 6, 29, 27, 1, &grid[1], floor_props->room_flags);
         spawn_y = DungeonRandRange(6, 27);
@@ -1444,8 +1445,8 @@ void GeneratePSMDMazeFloor(struct floor_properties *floor_props) {
     GenerateHuntAndKillMaze(2, 2, 29, 30, &abs_floor);
     // Copy the left side to the right side so it's symmetrical.
     enum terrain_type terrain_type;
-    for (int x = 2; x < HB_DUNGEON_MAX_X/2; ++x) {
-        for (int y = 2; y < HB_DUNGEON_MAX_Y; ++y) {
+    for (int x = 2; HB_DUNGEON_MAX_X/2 > x; ++x) {
+        for (int y = 2; HB_DUNGEON_MAX_Y > y; ++y) {
             terrain_type = abs_floor.tiles[x][y].terrain_type;
             abs_floor.tiles[(HB_DUNGEON_MAX_X) - x][y].terrain_type = terrain_type;
         }
@@ -1641,8 +1642,8 @@ void Generate12RoomOctopusFloor(struct floor_properties *floor_props) {
     GetGridPositions(start_pos_x, start_pos_y, 6, 4);
     InitDungeonGrid(grid, 6, 4);
     // Place rooms.
-    for (int x = 0; x < 6; ++x) {
-        for (int y = 0; y < 4; ++y) {
+    for (int x = 0; 6 > x; ++x) {
+        for (int y = 0; 4 > y; ++y) {
             grid[(x * HB_GRID_COLS) + y].is_room = true;
         }
     }
@@ -1653,11 +1654,11 @@ void Generate12RoomOctopusFloor(struct floor_properties *floor_props) {
     grid[(5 * HB_GRID_COLS) + 3].is_invalid = true;
     CreateRoomsAndAnchors(grid, 6, 4, start_pos_x, start_pos_y, floor_props->room_flags);
     // Connect the rooms.
-    for (int x = 0; x < 6; ++x) {
+    for (int x = 0; 6 > x; ++x) {
         grid[(x * HB_GRID_COLS) + 0].is_connected_to_bottom = true;
         grid[(x * HB_GRID_COLS) + 3].is_connected_to_top = true;
     }
-    for (int y = 0; y < 4; ++y) {
+    for (int y = 0; 4 > y; ++y) {
         grid[(0 * HB_GRID_COLS) + y].is_connected_to_right = true;
         grid[(5 * HB_GRID_COLS) + y].is_connected_to_left = true;
     }
@@ -1679,448 +1680,664 @@ void Generate12RoomOctopusFloor(struct floor_properties *floor_props) {
     GenerateSecondaryStructures(grid, 6, 4);
 }
 
-void __attribute__((naked)) GenerateHamiltonianCycleFloor(struct floor_properties floor_props) {
-    asm("stmdb sp!,{r3,r4,r5,r6,r7,r8,r9,r10,r11,lr}");
-    asm("sub sp,sp,#0xAE0");
-    asm("sub sp,sp,#0x1000");
-    asm("mov r4,r0");
-    asm("mov r0,#0"); // next 25 bytes are for keeping track of the connections
-    asm("mov r1,#0"); // of the 25 squares (5x5)
-    asm("zero_maze_info_loop:");
-    asm("str r0,[sp,r1]");
-    asm("add r1,#0x4");
-    asm("cmp r1,#0x100");
-    asm("blt zero_maze_info_loop");
-    asm("mov r0,#5");
-    asm("bl DungeonRandInt");
-    asm("mov r5,r0"); // Random X
-    asm("mov r0,#5");
-    asm("bl DungeonRandInt");
-    asm("mov r6,r0"); // Random Y
-    asm("mov r7,#0"); // Zero cells in the frontier.
-    asm("add r8,sp,#0x8");
-    asm("add r9,sp,#0x24");
-    asm("mov r0,#0b11000000");
-    asm("mov r1,#5");
-    asm("mul r3,r6,r1");
-    asm("add r2,r5,r3");
-    asm("strb r0,[r8,r2]");
-    asm("prim_maze_build_loop:");
-    asm("check_add_left_to_frontier:");
-    asm("cmp r5,#0"); // Check the left side.
-    asm("ble check_add_right_to_frontier");
-    asm("mov r1,#5");
-    asm("sub r2,r5,#1");
-    asm("mul r3,r6,r1");
-    asm("add r1,r2,r3");
-    asm("ldrb r12,[r8,r1]");
-    asm("tst r12,#0b10000000");
-    asm("bne check_add_right_to_frontier");
-    asm("orr r12,r12,#0b10000000");
-    asm("strb r12,[r8,r1]");
-    asm("sub r0,r5,#1");
-    asm("strb r0,[r9,#0x0]");
-    asm("add r7,r7,#1");
-    asm("strb r6,[r9,#0x1]");
-    asm("add r9,r9,#0x2");
-    asm("check_add_right_to_frontier:");
-    asm("cmp r5,#4");
-    asm("bge check_add_top_to_frontier");
-    asm("mov r1,#5");
-    asm("add r2,r5,#1");
-    asm("mul r3,r6,r1");
-    asm("add r1,r2,r3");
-    asm("ldrb r12,[r8,r1]");
-    asm("tst r12,#0b10000000");
-    asm("bne check_add_top_to_frontier");
-    asm("orr r12,r12,#0b10000000");
-    asm("strb r12,[r8,r1]");
-    asm("add r0,r5,#1");
-    asm("strb r0,[r9,#0x0]");
-    asm("add r7,r7,#1");
-    asm("strb r6,[r9,#0x1]");
-    asm("add r9,r9,#0x2");
-    asm("check_add_top_to_frontier:");
-    asm("cmp r6,#0");
-    asm("ble check_add_bottom_to_frontier");
-    asm("mov r1,#5");
-    asm("sub r2,r6,#1");
-    asm("mul r3,r2,r1");
-    asm("add r1,r5,r3");
-    asm("ldrb r12,[r8,r1]");
-    asm("tst r12,#0b10000000");
-    asm("bne check_add_bottom_to_frontier");
-    asm("orr r12,r12,#0b10000000");
-    asm("strb r12,[r8,r1]");
-    asm("strb r5,[r9,#0x0]");
-    asm("add r7,r7,#1");
-    asm("sub r0,r6,#1");
-    asm("strb r0,[r9,#0x1]");
-    asm("add r9,r9,#0x2");
-    asm("check_add_bottom_to_frontier:");
-    asm("cmp r6,#4");
-    asm("bge complete_to_frontier_check");
-    asm("mov r1,#5");
-    asm("add r2,r6,#1");
-    asm("mul r3,r2,r1");
-    asm("add r1,r5,r3");
-    asm("ldrb r12,[r8,r1]");
-    asm("tst r12,#0b10000000");
-    asm("bne complete_to_frontier_check");
-    asm("orr r12,r12,#0b10000000");
-    asm("strb r12,[r8,r1]");
-    asm("strb r5,[r9,#0x0]");
-    asm("add r7,r7,#1");
-    asm("add r0,r6,#1");
-    asm("strb r0,[r9,#0x1]");
-    asm("add r9,r9,#0x2");
-    asm("complete_to_frontier_check:");
-    asm("cmp r7,#0");
-    asm("beq break_prim_maze_build_loop");
-    asm("mov r0,r7");
-    asm("bl DungeonRandInt"); // select a random cell in the frontier
-    asm("mov r10,r0");
-    asm("lsl r3,r10,#1"); // Multiply by 2
-    asm("add r2,sp,#0x24");
-    asm("ldrb r5,[r2,r3]");
-    asm("add r3,#0x1");
-    asm("ldrb r6,[r2,r3]");
-    asm("mov r0,#5");
-    asm("mul r1,r6,r0");
-    asm("add r1,r1,r5");
-    asm("ldrb r11,[r8,r1]"); // get current connection bitflags
-    asm("mov r0,#4");
-    asm("bl DungeonRandInt");
-    asm("mov r2,r0");
-    asm("mov r0,#0");
-    asm("cmp r2,#2");
-    asm("bgt check_add_left_to_maze");
-    asm("beq check_add_right_to_maze");
-    asm("cmp r2,#1");
-    asm("beq check_add_top_to_maze");
-    asm("b check_add_bottom_to_maze");
-    asm("check_add_left_to_maze:");
-    asm("cmp r5,#0"); // Check the left side.
-    asm("ble check_add_right_to_maze");
-    asm("mov r1,#5");
-    asm("sub r2,r5,#1");
-    asm("mul r3,r6,r1");
-    asm("add r1,r2,r3");
-    asm("ldrb r12,[r8,r1]");
-    asm("cmp r12,#0b00000000");
-    asm("cmpne r12,#0b10000000");
-    asm("beq check_add_right_to_maze");
-    asm("orr r12,r12,#0b0100");
-    asm("orr r11,r11,#0b0001");
-    asm("strb r12,[r8,r1]");
-    asm("b cell_added_to_maze");
-    asm("check_add_right_to_maze:");
-    asm("cmp r5,#4");
-    asm("bge check_add_top_to_maze");
-    asm("mov r1,#5");
-    asm("add r2,r5,#1");
-    asm("mul r3,r6,r1");
-    asm("add r1,r2,r3");
-    asm("ldrb r12,[r8,r1]");
-    asm("cmp r12,#0b00000000");
-    asm("cmpne r12,#0b10000000");
-    asm("beq check_add_top_to_maze");
-    asm("orr r12,r12,#0b0001");
-    asm("orr r11,r11,#0b0100");
-    asm("strb r12,[r8,r1]");
-    asm("b cell_added_to_maze");
-    asm("check_add_top_to_maze:");
-    asm("cmp r6,#0");
-    asm("ble check_add_bottom_to_maze");
-    asm("mov r1,#5");
-    asm("sub r2,r6,#1");
-    asm("mul r3,r2,r1");
-    asm("add r1,r5,r3");
-    asm("ldrb r12,[r8,r1]");
-    asm("cmp r12,#0b00000000");
-    asm("cmpne r12,#0b10000000");
-    asm("beq check_add_bottom_to_maze");
-    asm("orr r12,r12,#0b0010");
-    asm("orr r11,r11,#0b1000");
-    asm("strb r12,[r8,r1]");
-    asm("b cell_added_to_maze");
-    asm("check_add_bottom_to_maze:");
-    asm("cmp r6,#4");
-    asm("bge check_add_left_to_maze");
-    asm("mov r1,#5");
-    asm("add r2,r6,#1");
-    asm("mul r3,r2,r1");
-    asm("add r1,r5,r3");
-    asm("ldrb r12,[r8,r1]");
-    asm("cmp r12,#0b00000000");
-    asm("cmpne r12,#0b10000000");
-    asm("beq check_add_left_to_maze");
-    asm("orr r12,r12,#0b1000");
-    asm("orr r11,r11,#0b0010");
-    asm("strb r12,[r8,r1]");
-    // asm("b cell_added_to_maze"); // redundant
-    asm("cell_added_to_maze:");
-    asm("mov r0,#5");
-    asm("mul r1,r6,r0");
-    asm("add r1,r1,r5");
-    asm("strb r11,[r8,r1]");
-    asm("sub r9,r9,#0x2");
-    asm("ldrb r0,[r9,#0x0]");
-    asm("ldrb r1,[r9,#0x1]");
-    asm("lsl r3,r10,#1"); // Multiply by 2
-    asm("add r2,sp,#0x24");
-    asm("sub r7,r7,#1");
-    asm("strb r0,[r2,r3]");
-    asm("add r3,#0x1");
-    asm("strb r1,[r2,r3]");
-    asm("b prim_maze_build_loop");
-    asm("break_prim_maze_build_loop:");
-    asm("mov r5,#0");
-    asm("create_hamiltonian_cycle_loop_x:");
-    asm("lsl r10,r5,#2");
-    asm("add r10,r10,#3");
-    asm("mov r6,#0");
-    asm("create_hamiltonian_cycle_loop_y:");
-    asm("mov r1,#5");
-    asm("lsl r11,r6,#2");
-    asm("add r11,r11,#3");
-    asm("mul r2,r6,r1");
-    asm("add r3,r2,r5");
-    asm("ldrb r7,[r8,r3]");
-    asm("add r0,r10,#1");
-    asm("add r1,r11,#1");
-    asm("bl GetTileSafe"); // This tile is always floor.
-    asm("ldrh r1,[r0,#0x0]");
-    asm("bic r1,r1,#0b11");
-    asm("orr r1,r1,#0b01");
-    asm("strh r1,[r0,#0x0]");
-    asm("add r0,r10,#3");
-    asm("add r1,r11,#1");
-    asm("bl GetTileSafe"); // This tile is always floor.
-    asm("ldrh r1,[r0,#0x0]");
-    asm("bic r1,r1,#0b11");
-    asm("orr r1,r1,#0b01");
-    asm("strh r1,[r0,#0x0]");
-    asm("add r0,r10,#1");
-    asm("add r1,r11,#3");
-    asm("bl GetTileSafe"); // This tile is always floor.
-    asm("ldrh r1,[r0,#0x0]");
-    asm("bic r1,r1,#0b11");
-    asm("orr r1,r1,#0b01");
-    asm("strh r1,[r0,#0x0]");
-    asm("add r0,r10,#3");
-    asm("add r1,r11,#3");
-    asm("bl GetTileSafe"); // This tile is always floor.
-    asm("ldrh r1,[r0,#0x0]");
-    asm("bic r1,r1,#0b11");
-    asm("orr r1,r1,#0b01");
-    asm("strh r1,[r0,#0x0]");
-    asm("check_left_connection:");
-    asm("tst r7,#0b0001");
-    asm("bne connect_left_side");
-    asm("add r0,r10,#1");
-    asm("add r1,r11,#2");
-    asm("bl GetTileSafe");
-    asm("ldrh r1,[r0,#0x0]");
-    asm("bic r1,r1,#0b11");
-    asm("orr r1,r1,#0b01");
-    asm("strh r1,[r0,#0x0]");
-    asm("b check_right_connection");
-    asm("connect_left_side:");
-    asm("add r0,r10,#0");
-    asm("add r1,r11,#1");
-    asm("bl GetTileSafe");
-    asm("ldrh r1,[r0,#0x0]");
-    asm("bic r1,r1,#0b11");
-    asm("orr r1,r1,#0b01");
-    asm("strh r1,[r0,#0x0]");
-    asm("add r0,r10,#0");
-    asm("add r1,r11,#3");
-    asm("bl GetTileSafe");
-    asm("ldrh r1,[r0,#0x0]");
-    asm("bic r1,r1,#0b11");
-    asm("orr r1,r1,#0b01");
-    asm("strh r1,[r0,#0x0]");
-    asm("check_right_connection:");
-    asm("tst r7,#0b0100");
-    asm("bne check_top_connection");
-    asm("add r0,r10,#3");
-    asm("add r1,r11,#2");
-    asm("bl GetTileSafe");
-    asm("ldrh r1,[r0,#0x0]");
-    asm("bic r1,r1,#0b11");
-    asm("orr r1,r1,#0b01");
-    asm("strh r1,[r0,#0x0]");
-    // Redundant connecting right because the connection
-    // should be both ways and should be handled by left
-    // connection.
-    asm("check_top_connection:");
-    asm("tst r7,#0b1000");
-    asm("bne connect_top_side");
-    asm("add r0,r10,#2");
-    asm("add r1,r11,#1");
-    asm("bl GetTileSafe");
-    asm("ldrh r1,[r0,#0x0]");
-    asm("bic r1,r1,#0b11");
-    asm("orr r1,r1,#0b01");
-    asm("strh r1,[r0,#0x0]");
-    asm("b check_bottom_connection");
-    asm("connect_top_side:");
-    asm("add r0,r10,#1");
-    asm("add r1,r11,#0");
-    asm("bl GetTileSafe");
-    asm("ldrh r1,[r0,#0x0]");
-    asm("bic r1,r1,#0b11");
-    asm("orr r1,r1,#0b01");
-    asm("strh r1,[r0,#0x0]");
-    asm("add r0,r10,#3");
-    asm("add r1,r11,#0");
-    asm("bl GetTileSafe");
-    asm("ldrh r1,[r0,#0x0]");
-    asm("bic r1,r1,#0b11");
-    asm("orr r1,r1,#0b01");
-    asm("strh r1,[r0,#0x0]");
-    asm("check_bottom_connection:");
-    asm("tst r7,#0b0010");
-    asm("bne check_connection_complete");
-    asm("add r0,r10,#2");
-    asm("add r1,r11,#3");
-    asm("bl GetTileSafe");
-    asm("ldrh r1,[r0,#0x0]");
-    asm("bic r1,r1,#0b11");
-    asm("orr r1,r1,#0b01");
-    asm("strh r1,[r0,#0x0]");
-    // Redundant connecting bottom because the connection
-    // should be both ways and should be handled by top
-    // connection.
-    asm("check_connection_complete:");
-    asm("add r6,r6,#1");
-    asm("cmp r6,#5");
-    asm("blt create_hamiltonian_cycle_loop_y");
-    asm("add r5,r5,#1");
-    asm("cmp r5,#5");
-    asm("blt create_hamiltonian_cycle_loop_x");
-    asm("mov r0,#0x3");
-    asm("bl DungeonRandInt");
-    asm("ldrsb r1,[r4,#0x1]"); // Room Density
-    asm("cmp r1,#0x0");
-    asm("rsblt r10,r1,#0x0"); // If negative, use abs value.
-    asm("addge r10,r1,r0");
-    asm("cmp r10,#0x4");   // Less than 4 rooms fail the check for enough room
-    asm("movlt r10,#0x4"); // tiles. For some reason 3 doesn't work...
-    asm("cmp r10,#0xF");   // Could do more rooms, but that would require more
-    asm("movgt r10,#0xF"); // work... and 15 is enough anyway I'm sure.
-    asm("add r0,sp,#0x80");
-    asm("mov r1,#0x1");
-    asm("mov r2,r10"); // 4 -> 15
-    asm("bl InitDungeonGrid");
-    asm("mov r0,#0");
-    asm("add r6,sp,#0xC");
-    asm("init_room_select_loop:");
-    asm("strb r0,[r6,r0]");
-    asm("add r0,r0,#1");
-    asm("cmp r0,#16");
-    asm("blt init_room_select_loop");
-    asm("mov r5,#0");
-    asm("select_room_loop:"); // Randomly select rooms to fill out until
-    asm("mov r0,r5");
-    asm("mov r1,#16");
-    asm("bl DungeonRandRange");
-    asm("ldrb r2,[r6,r5]");
-    asm("ldrb r1,[r6,r0]");
-    asm("strb r1,[r6,r5]");
-    asm("strb r2,[r6,r0]");
-    asm("add r5,r5,#1");
-    asm("cmp r5,r10");
-    asm("blt select_room_loop");
+/* The original assembly version of this function has been left in the
+// codebase for reference, but it has been rewritten in C.
+GenerateHamiltonianCycleFloor:
+    	stmdb sp!,{r3,r4,r5,r6,r7,r8,r9,r10,r11,lr}
+    	sub   sp,sp,#0xAE0
+    	sub   sp,sp,#0x1000
+    	mov   r4,r0
+    	mov   r0,#0 ; next 25 bytes are for keeping track of the connections
+    	mov   r1,#0 ; of the 25 squares (5x5)
+    	zero_maze_info_loop:
+        	str   r0,[sp,r1]
+        	add   r1,#0x4
+        	cmp   r1,#0x100
+        	blt   zero_maze_info_loop
+    	mov r0,#5
+    	bl  DungeonRandInt
+    	mov r5,r0 ; Random X
+    	mov r0,#5
+    	bl  DungeonRandInt
+    	mov r6,r0 ; Random Y
+    	mov r7,#0 ; Zero cells in the frontier.
+    	add r8,sp,#0x8
+    	add r9,sp,#0x24
+    	mov	r0,#0b11000000
+    	mov	r1,#5
+    	mul	r3,r6,r1
+    	add	r2,r5,r3
+    	strb   r0,[r8,r2]
+    	prim_maze_build_loop:
+        	check_add_left_to_frontier:
+        	cmp	r5,#0 ; Check the left side.
+        	ble	check_add_right_to_frontier
+        	mov	r1,#5
+        	sub	r2,r5,#1
+        	mul	r3,r6,r1
+        	add	r1,r2,r3
+        	ldrb r12,[r8,r1]
+        	tst	r12,#0b10000000
+        	bne	check_add_right_to_frontier
+        	orr	r12,r12,#0b10000000
+        	strb r12,[r8,r1]
+        	sub	r0,r5,#1
+        	strb r0,[r9,#0x0]
+        	add	r7,r7,#1
+        	strb r6,[r9,#0x1]
+        	add	r9,r9,#0x2
+        	check_add_right_to_frontier:
+        	cmp	r5,#4
+        	bge	check_add_top_to_frontier
+        	mov	r1,#5
+        	add	r2,r5,#1
+        	mul	r3,r6,r1
+        	add	r1,r2,r3
+        	ldrb r12,[r8,r1]
+        	tst	r12,#0b10000000
+        	bne	check_add_top_to_frontier
+        	orr	r12,r12,#0b10000000
+        	strb r12,[r8,r1]
+        	add	r0,r5,#1
+        	strb r0,[r9,#0x0]
+        	add	r7,r7,#1
+        	strb r6,[r9,#0x1]
+        	add	r9,r9,#0x2
+        	check_add_top_to_frontier:
+        	cmp	r6,#0
+        	ble	check_add_bottom_to_frontier
+        	mov	r1,#5
+        	sub	r2,r6,#1
+        	mul	r3,r2,r1
+        	add	r1,r5,r3
+        	ldrb r12,[r8,r1]
+        	tst	r12,#0b10000000
+        	bne	check_add_bottom_to_frontier
+        	orr	r12,r12,#0b10000000
+        	strb r12,[r8,r1]
+        	strb r5,[r9,#0x0]
+        	add	r7,r7,#1
+        	sub	r0,r6,#1
+        	strb r0,[r9,#0x1]
+        	add	r9,r9,#0x2
+        	check_add_bottom_to_frontier:
+        	cmp	r6,#4
+        	bge	complete_to_frontier_check
+        	mov	r1,#5
+        	add	r2,r6,#1
+        	mul	r3,r2,r1
+        	add	r1,r5,r3
+        	ldrb r12,[r8,r1]
+        	tst	r12,#0b10000000
+        	bne	complete_to_frontier_check
+        	orr	r12,r12,#0b10000000
+        	strb r12,[r8,r1]
+        	strb r5,[r9,#0x0]
+        	add	r7,r7,#1
+        	add	r0,r6,#1
+        	strb r0,[r9,#0x1]
+        	add	r9,r9,#0x2
+        	complete_to_frontier_check:
+        	cmp	r7,#0
+        	beq	break_prim_maze_build_loop
+        	mov	r0,r7
+        	bl 	DungeonRandInt ; select a random cell in the frontier
+        	mov	r10,r0
+        	lsl	r3,r10,#1 ; Multiply by 2
+        	add	r2,sp,#0x24
+        	ldrb r5,[r2,r3]
+        	add	r3,#0x1
+        	ldrb r6,[r2,r3]
+        	mov	r0,#5
+        	mul	r1,r6,r0
+        	add	r1,r1,r5
+        	ldrb r11,[r8,r1] ; get current connection bitflags
+        	mov	r0,#4
+        	bl 	DungeonRandInt
+        	mov	r2,r0
+        	mov	r0,#0
+        	cmp	r2,#2
+        	bgt	check_add_left_to_maze
+        	beq	check_add_right_to_maze
+        	cmp	r2,#1
+        	beq	check_add_top_to_maze
+        	b  	check_add_bottom_to_maze
+        	check_add_left_to_maze:
+            	cmp	r5,#0 ; Check the left side.
+            	ble	check_add_right_to_maze
+            	mov	r1,#5
+            	sub	r2,r5,#1
+            	mul	r3,r6,r1
+            	add	r1,r2,r3
+            	ldrb   r12,[r8,r1]
+            	cmp	r12,#0b00000000
+            	cmpne  r12,#0b10000000
+            	beq	check_add_right_to_maze
+            	orr	r12,0b0100
+            	orr	r11,0b0001
+            	strb   r12,[r8,r1]
+            	b  	cell_added_to_maze
+            	check_add_right_to_maze:
+            	cmp	r5,#4
+            	bge	check_add_top_to_maze
+            	mov	r1,#5
+            	add	r2,r5,#1
+            	mul	r3,r6,r1
+            	add	r1,r2,r3
+            	ldrb   r12,[r8,r1]
+            	cmp	r12,#0b00000000
+            	cmpne  r12,#0b10000000
+            	beq	check_add_top_to_maze
+            	orr	r12,0b0001
+            	orr	r11,0b0100
+            	strb   r12,[r8,r1]
+            	b  	cell_added_to_maze
+            	check_add_top_to_maze:
+            	cmp	r6,#0
+            	ble	check_add_bottom_to_maze
+            	mov	r1,#5
+            	sub	r2,r6,#1
+            	mul	r3,r2,r1
+            	add	r1,r5,r3
+            	ldrb   r12,[r8,r1]
+            	cmp	r12,#0b00000000
+            	cmpne  r12,#0b10000000
+            	beq	check_add_bottom_to_maze
+            	orr	r12,0b0010
+            	orr	r11,0b1000
+            	strb   r12,[r8,r1]
+            	b  	cell_added_to_maze
+            	check_add_bottom_to_maze:
+            	cmp	r6,#4
+            	bge	check_add_left_to_maze
+            	mov	r1,#5
+            	add	r2,r6,#1
+            	mul	r3,r2,r1
+            	add	r1,r5,r3
+            	ldrb   r12,[r8,r1]
+            	cmp	r12,#0b00000000
+            	cmpne  r12,#0b10000000
+            	beq	check_add_left_to_maze
+            	orr	r12,0b1000
+            	orr	r11,0b0010
+            	strb   r12,[r8,r1]
+            	; b  	cell_added_to_maze ; redundant
+        	cell_added_to_maze:
+        	mov	r0,#5
+        	mul	r1,r6,r0
+        	add	r1,r1,r5
+        	strb r11,[r8,r1]
+        	sub	r9,r9,#0x2
+        	ldrb r0,[r9,#0x0]
+        	ldrb r1,[r9,#0x1]
+        	lsl	r3,r10,#1 ; Multiply by 2
+        	add	r2,sp,#0x24
+        	sub	r7,r7,#1
+        	strb r0,[r2,r3]
+        	add	r3,#0x1
+        	strb r1,[r2,r3]
+        	b prim_maze_build_loop
+    	break_prim_maze_build_loop:
+    	mov r5,#0
+    	create_hamiltonian_cycle_loop_x:
+        	lsl r10,r5,#2
+        	add r10,r10,#3
+        	mov r6,#0
+        	create_hamiltonian_cycle_loop_y:
+            	mov r1,#5
+            	lsl r11,r6,#2
+            	add r11,r11,#3
+            	mul r2,r6,r1
+            	add r3,r2,r5
+            	ldrb r7,[r8,r3]
+            	add  r0,r10,#1
+            	add  r1,r11,#1
+            	bl   GetTileSafe ; This tile is always floor.
+            	ldrh r1,[r0,#0x0]
+            	bic  r1,r1,#0b11
+            	orr  r1,r1,#0b01
+            	strh r1,[r0,#0x0]
+            	add  r0,r10,#3
+            	add  r1,r11,#1
+            	bl   GetTileSafe ; This tile is always floor.
+            	ldrh r1,[r0,#0x0]
+            	bic  r1,r1,#0b11
+            	orr  r1,r1,#0b01
+            	strh r1,[r0,#0x0]
+            	add  r0,r10,#1
+            	add  r1,r11,#3
+            	bl   GetTileSafe ; This tile is always floor.
+            	ldrh r1,[r0,#0x0]
+            	bic  r1,r1,#0b11
+            	orr  r1,r1,#0b01
+            	strh r1,[r0,#0x0]
+            	add  r0,r10,#3
+            	add  r1,r11,#3
+            	bl   GetTileSafe ; This tile is always floor.
+            	ldrh r1,[r0,#0x0]
+            	bic  r1,r1,#0b11
+            	orr  r1,r1,#0b01
+            	strh r1,[r0,#0x0]
+            	check_left_connection:
+            	tst  r7,#0b0001
+            	bne connect_left_side
+            	add  r0,r10,#1
+            	add  r1,r11,#2
+            	bl   GetTileSafe
+            	ldrh r1,[r0,#0x0]
+            	bic  r1,r1,#0b11
+            	orr  r1,r1,#0b01
+            	strh r1,[r0,#0x0]
+            	b	check_right_connection
+            	connect_left_side:
+            	add  r0,r10,#0
+            	add  r1,r11,#1
+            	bl   GetTileSafe
+            	ldrh r1,[r0,#0x0]
+            	bic  r1,r1,#0b11
+            	orr  r1,r1,#0b01
+            	strh r1,[r0,#0x0]
+            	add  r0,r10,#0
+            	add  r1,r11,#3
+            	bl   GetTileSafe
+            	ldrh r1,[r0,#0x0]
+            	bic  r1,r1,#0b11
+            	orr  r1,r1,#0b01
+            	strh r1,[r0,#0x0]
+            	check_right_connection:
+            	tst  r7,#0b0100
+            	bne check_top_connection
+            	add  r0,r10,#3
+            	add  r1,r11,#2
+            	bl   GetTileSafe
+            	ldrh r1,[r0,#0x0]
+            	bic  r1,r1,#0b11
+            	orr  r1,r1,#0b01
+            	strh r1,[r0,#0x0]
+            	; Redundant connecting right because the connection
+            	; should be both ways and should be handled by left
+            	; connection.
+            	check_top_connection:
+            	tst  r7,#0b1000
+            	bne  connect_top_side
+            	add  r0,r10,#2
+            	add  r1,r11,#1
+            	bl   GetTileSafe
+            	ldrh r1,[r0,#0x0]
+            	bic  r1,r1,#0b11
+            	orr  r1,r1,#0b01
+            	strh r1,[r0,#0x0]
+            	b	check_bottom_connection
+            	connect_top_side:
+            	add  r0,r10,#1
+            	add  r1,r11,#0
+            	bl   GetTileSafe
+            	ldrh r1,[r0,#0x0]
+            	bic  r1,r1,#0b11
+            	orr  r1,r1,#0b01
+            	strh r1,[r0,#0x0]
+            	add  r0,r10,#3
+            	add  r1,r11,#0
+            	bl   GetTileSafe
+            	ldrh r1,[r0,#0x0]
+            	bic  r1,r1,#0b11
+            	orr  r1,r1,#0b01
+            	strh r1,[r0,#0x0]
+            	check_bottom_connection:
+            	tst  r7,#0b0010
+            	bne  check_connection_complete
+            	add  r0,r10,#2
+            	add  r1,r11,#3
+            	bl   GetTileSafe
+            	ldrh r1,[r0,#0x0]
+            	bic  r1,r1,#0b11
+            	orr  r1,r1,#0b01
+            	strh r1,[r0,#0x0]
+            	; Redundant connecting bottom because the connection
+            	; should be both ways and should be handled by top
+            	; connection.
+            	check_connection_complete:
+            	add r6,r6,#1
+            	cmp r6,#5
+            	blt create_hamiltonian_cycle_loop_y
+        	add r5,r5,#1
+        	cmp r5,#5
+        	blt create_hamiltonian_cycle_loop_x
+    	mov   r0,#0x3
+    	bl	DungeonRandInt
+    	ldrsb r1,[r4,#0x1] ; Room Density
+    	cmp   r1,#0x0
+    	rsblt r10,r1,#0x0 ; If negative, use abs value.
+    	addge r10,r1,r0
+    	cmp   r10,#0x4 ; Less than 4 rooms fail the check for enough room
+    	movlt r10,#0x4 ; tiles. For some reason 3 doesn't work...
+    	cmp   r10,#0xF ; Could do more rooms, but that would require more work...
+    	movgt r10,#0xF ; and 15 is enough anyway I'm sure.
+    	add   r0,sp,#0x80
+    	mov   r1,#0x1
+    	mov   r2,r10 ; 4 -> 15
+    	bl	InitDungeonGrid
+    	mov   r0,#0
+    	add   r6,sp,#0xC
+    	init_room_select_loop:
+        	strb r0,[r6,r0]
+        	add  r0,r0,#1
+        	cmp  r0,#16
+        	blt  init_room_select_loop
+    	mov   r5,#0
+    	select_room_loop: ; Randomly select rooms to fill out until
+        	mov  r0,r5
+        	mov  r1,#16
+        	bl   DungeonRandRange
+        	ldrb r2,[r6,r5]
+        	ldrb r1,[r6,r0]
+        	strb r1,[r6,r5]
+        	strb r2,[r6,r0]
+        	add  r5,r5,#1
+        	cmp  r5,r10
+        	blt  select_room_loop
+    	; 00   01 02 03   04
+    	;
+    	; 05          	06
+    	; 07          	08
+    	; 09          	10
+    	;
+    	; 11   12 13 14   15
+    	mov  r8,#0
+    	add  r9,sp,#0x80
+    	; Maybe a bit jank? I could also like make a list for the coordinates
+    	; of each place or maybe like to number them in a different way? IDK
+    	; should probably number them in a different way and then I could
+    	; make a 3x3 grid of cords with 4 exceptions for the corners.
+    	; (or make life easier and ignore the corners.
+    	create_rooms_loop:
+        	ldrb r7,[r6,r8]
+        	cmp   r7,#0
+        	cmpne r7,#5
+        	cmpne r7,#7
+        	cmpne r7,#9
+        	cmpne r7,#11
+        	moveq r0,#2
+        	moveq r2,#5
+        	beq   handle_room_y
+        	cmp   r7,#1
+        	cmpne r7,#12
+        	moveq r0,#8
+        	moveq r2,#11
+        	beq   handle_room_y
+        	cmp   r7,#2
+        	cmpne r7,#13
+        	moveq r0,#12
+        	moveq r2,#15
+        	beq   handle_room_y
+        	cmp   r7,#3
+        	cmpne r7,#14
+        	moveq r0,#16
+        	moveq r2,#19
+        	beq   handle_room_y
+        	mov   r0,#22
+        	mov   r2,#25
+        	handle_room_y:
+        	cmp   r7,#4
+        	movle r1,#2
+        	movle r3,#5
+        	ble   actually_make_room
+        	cmp   r7,#6
+        	movle r1,#8
+        	movle r3,#11
+        	ble   actually_make_room
+        	cmp   r7,#8
+        	movle r1,#12
+        	movle r3,#15
+        	ble   actually_make_room
+        	cmp   r7,#10
+        	movle r1,#16
+        	movle r3,#19
+        	ble   actually_make_room
+        	mov   r1,#22
+        	mov   r3,#25
+        	actually_make_room:
+        	strb  r8,[sp,#0x0]
+        	str   r9,[sp,#0x4]
+        	mov   r12,#0
+        	strb  r12,[sp,#0x8] ; Force no room imperfections.
+        	bl	CreateRoomInCell
+        	add   r8,r8,#1
+        	add   r9,r9,DUNGEON_GRID_CELL_BYTES
+        	cmp   r8,r10
+        	blt   create_rooms_loop
+    	ldr   r7,=FLOOR_GENERATION_STATUS
+    	add   r0,sp,#0x80
+    	ldrsh r3,[r7,#0x10]
+    	mov   r1,#0x1
+    	mov   r2,r10
+    	bl	GenerateMonsterHouse
+    	ldrb  r3,[r4,#0x13]
+    	add   r0,sp,#0x80
+    	mov   r1,#0x1
+    	mov   r2,r10
+    	bl	GenerateExtraHallways
+    	add   r0,sp,#0x80
+    	mov   r1,#0x1
+    	mov   r2,r10
+    	bl	GenerateSecondaryStructures
+    	add   sp,sp,#0xAE0
+    	add   sp,sp,#0x1000
+    	ldmia sp!,{r3,r4,r5,r6,r7,r8,r9,r10,r11,pc} */
+void GenerateHamiltonianCycleFloor(struct floor_properties *floor_props) {
+    // Connection Flags For Tiny Maze:
+    // Bit 0 (0b00000001): connects left
+    // Bit 1 (0b00000010): connects bottom
+    // Bit 2 (0b00000100): connects right
+    // Bit 3 (0b00001000): connects top
+    // Bit 6 (0b01000000): visited
+    // Bit 7 (0b10000000): frontier
+    
+    // Create a 5x5 maze using Prim's algorithm
+    uint8_t mini_maze_cells[5][5] = {0};  // Connection info for each 5x5 cell
+    uint8_t frontier[25][2];
+    int frontier_count = 0;
+    
+    // Start with a random cell
+    int mini_cell_x = DungeonRandInt(5);
+    int mini_cell_y = DungeonRandInt(5);
+    mini_maze_cells[mini_cell_x][mini_cell_y] = 0xC0;  // Mark as visited (0b11000000)
+    
+    // Build the mini maze using prim's algorithm until the frontier is empty.
+    enum direction_id direction;
+    int mini_neighbor_x, mini_neighbor_y, mini_rand_cell;
+    do {
+        // Add neighbors to the frontier if we haven't seen them yet.
+        int mini_new_x = mini_cell_x - 1;
+        if (0 < mini_cell_x && 0 == (mini_maze_cells[mini_new_x][mini_cell_y] & 0x80)) {
+            mini_maze_cells[mini_new_x][mini_cell_y] |= 0x80;
+            frontier[frontier_count][HB_X_POS] = mini_new_x;
+            frontier[frontier_count][HB_Y_POS] = mini_cell_y;
+            ++frontier_count;
+        }
+        mini_new_x = mini_cell_x + 1;
+        if (4 > mini_cell_x && 0 == (mini_maze_cells[mini_new_x][mini_cell_y] & 0x80)) {
+            mini_maze_cells[mini_new_x][mini_cell_y] |= 0x80;
+            frontier[frontier_count][HB_X_POS] = mini_new_x;
+            frontier[frontier_count][HB_Y_POS] = mini_cell_y;
+            ++frontier_count;
+        }
+        int mini_new_y = mini_cell_y - 1;
+        if (0 < mini_cell_y && 0 == (mini_maze_cells[mini_cell_x][mini_new_y] & 0x80)) {
+            mini_maze_cells[mini_cell_x][mini_new_y] |= 0x80;
+            frontier[frontier_count][HB_X_POS] = mini_cell_x;
+            frontier[frontier_count][HB_Y_POS] = mini_new_y;
+            ++frontier_count;
+        }
+        mini_new_y = mini_cell_y + 1;
+        if (4 > mini_cell_y && !(mini_maze_cells[mini_cell_x][mini_new_y] & 0x80)) {
+            mini_maze_cells[mini_cell_x][mini_new_y] |= 0x80;
+            frontier[frontier_count][HB_X_POS] = mini_cell_x;
+            frontier[frontier_count][HB_Y_POS] = mini_new_y;
+            ++frontier_count;
+        }
+
+        // If the frontier is empty we don't have anything else to do.
+        if(0 == frontier_count) {
+            break;
+        }
+
+        // Select a random cell from the frontier.
+        mini_rand_cell = DungeonRandInt(frontier_count);
+        mini_cell_x = frontier[mini_rand_cell][HB_X_POS];
+        mini_cell_y = frontier[mini_rand_cell][HB_Y_POS];
+        // Pick random direction to connect.
+        direction = RandomCardinalDirection();
+        // Try to find a visited neighbor in the chosen direction
+        for (int i = 0; 4 > i; i++) {
+            direction = (direction + 2) & 0x07; // 0b00000111
+            mini_neighbor_x = mini_cell_x + DIRECTIONS_XY[direction][HB_X_POS];
+            mini_neighbor_y = mini_cell_y + DIRECTIONS_XY[direction][HB_Y_POS];
+            if (0 > mini_neighbor_x || 0 > mini_neighbor_y) {
+                continue; // Out of bounds. 
+            }
+            if (5 <= mini_neighbor_x || 5 <= mini_neighbor_y) {
+                continue; // Out of bounds.
+            }
+            
+            // Check if neighbor is visited (not just in frontier). If so,
+            // connect the current cell and neighbor cell to each other. So,
+            // when the current cell is connected left the neighbor is
+            // connected to the right.
+            if (mini_maze_cells[mini_neighbor_x][mini_neighbor_y] & 0x40) {
+                if (DIR_LEFT == direction) { // Left
+                    mini_maze_cells[mini_cell_x][mini_cell_y] |= 0x41;
+                    mini_maze_cells[mini_neighbor_x][mini_neighbor_y] |= 0x04;
+                } else if (DIR_RIGHT == direction) { // Right
+                    mini_maze_cells[mini_cell_x][mini_cell_y] |= 0x44;
+                    mini_maze_cells[mini_neighbor_x][mini_neighbor_y] |= 0x01;
+                } else if (DIR_UP == direction) { // Top
+                    mini_maze_cells[mini_cell_x][mini_cell_y] |= 0x48;
+                    mini_maze_cells[mini_neighbor_x][mini_neighbor_y] |= 0x02;
+                } else  { // (DIR_DOWN == direction) { // Bottom
+                    mini_maze_cells[mini_cell_x][mini_cell_y] |= 0x42;
+                    mini_maze_cells[mini_neighbor_x][mini_neighbor_y] |= 0x08;
+                }
+                break;
+            }
+        }
+        
+        // Remove selected cell from frontier and replace with last element
+        frontier[mini_rand_cell][HB_X_POS] = frontier[frontier_count - 1][HB_X_POS];
+        frontier[mini_rand_cell][HB_Y_POS] = frontier[frontier_count - 1][HB_Y_POS];
+        frontier_count--;
+    } while (true);
+    
+    // Apply the 5x5 maze to the dungeon floor; however, each cell in the mini
+    // maze becomes a 4x4 area to create the cycle
+    // For example...
+    //  _            _______
+    // | | (mini) -> |  _  | (actual)
+    //               | | | |
+    //               | | | |
+    for (int maze_y = 0; 5 > maze_y; maze_y++) {
+        for (int maze_x = 0; 5 > maze_x; maze_x++) {
+            uint8_t connections = mini_maze_cells[maze_x][maze_y];
+            // Calculate dungeon coordinates for this 3x3 area
+            int dun_pos_x = maze_x * 4 + 3;
+            int dun_pos_y = maze_y * 4 + 3;
+            
+            // Set the corners of the 3x3 area as floor since they will always
+            // be a floor tile regardless of how they connect.
+            struct tile *tile;
+            tile = GetTileSafe(dun_pos_x + 1, dun_pos_y + 1);
+            tile->terrain_type = TERRAIN_NORMAL;
+            tile = GetTileSafe(dun_pos_x + 3, dun_pos_y + 1);
+            tile->terrain_type = TERRAIN_NORMAL;
+            tile = GetTileSafe(dun_pos_x + 1, dun_pos_y + 3);
+            tile->terrain_type = TERRAIN_NORMAL;
+            tile = GetTileSafe(dun_pos_x + 3, dun_pos_y + 3);
+            tile->terrain_type = TERRAIN_NORMAL;
+            if (connections & 0x01) { // Left Connection
+                tile = GetTileSafe(dun_pos_x, dun_pos_y + 1);
+                tile->terrain_type = TERRAIN_NORMAL;
+                tile = GetTileSafe(dun_pos_x, dun_pos_y + 3);
+                tile->terrain_type = TERRAIN_NORMAL;
+            } else {
+                tile = GetTileSafe(dun_pos_x + 1, dun_pos_y + 2);
+                tile->terrain_type = TERRAIN_NORMAL;
+            }
+            // Note: Creating full connections for the right connections is
+            // redundant because it should be handled by left connections.
+            if (0 == (connections & 0x04)) { // Right Connection
+                tile = GetTileSafe(dun_pos_x + 3, dun_pos_y + 2);
+                tile->terrain_type = TERRAIN_NORMAL;
+            }
+            if (connections & 0x08) { // Up Connection
+                tile = GetTileSafe(dun_pos_x + 1, dun_pos_y);
+                tile->terrain_type = TERRAIN_NORMAL;
+                tile = GetTileSafe(dun_pos_x + 3, dun_pos_y);
+                tile->terrain_type = TERRAIN_NORMAL;
+            } else {
+                tile = GetTileSafe(dun_pos_x + 2, dun_pos_y + 1);
+                tile->terrain_type = TERRAIN_NORMAL;
+            }
+            // Note: Creating full connections for the down connections is
+            // redundant because it should be handled by up connections.
+            if (0 == (connections & 0x02)) { // Down Connections
+                tile = GetTileSafe(dun_pos_x + 2, dun_pos_y + 3);
+                tile->terrain_type = TERRAIN_NORMAL;
+            }
+        }
+    }
+    
+    // Calculate number of rooms to generate
+    int room_density = CalcActualRoomDensity(floor_props->room_density);
+    if (15 < room_density) {
+        room_density = 15;
+    }
+    if (4 > room_density) {
+        room_density = 4;
+    }
+    
+    // Setup grid.
+    struct dungeon_grid_cell grid[HB_GRID_COLS];
+    InitDungeonGrid(grid, 1, room_density);
+    
+    // Create a list of the 16 rooms and randomly shuffle the order around
+    // to randomly select a room_density to create.
+    uint8_t room_assignments[16];
+    for (int i = 0; 16 > i; i++) {
+        room_assignments[i] = i;
+    }
+    for (int i = 0; i < room_density; i++) {
+        int rand = DungeonRandRange(i, 16);
+        uint8_t tmp = room_assignments[i];
+        room_assignments[i] = room_assignments[rand];
+        room_assignments[rand] = tmp;
+    }
+    // Visual Representation of Room Location by Number
     // 00   01 02 03   04
-    // 
     // 05              06
     // 07              08
     // 09              10
-    // 
     // 11   12 13 14   15
-    asm("mov r8,#0");
-    asm("add r9,sp,#0x80");
-    // Maybe a bit jank? I could also like make a list for the coordinates
-    // of each place or maybe like to number them in a different way? IDK
-    // should probably number them in a different way and then I could
-    // make a 3x3 grid of cords with 4 exceptions for the corners.
-    // (or make life easier and ignore the corners).
-    asm("create_rooms_loop:");
-    asm("ldrb r7,[r6,r8]");
-    asm("cmp r7,#0");
-    asm("cmpne r7,#5");
-    asm("cmpne r7,#7");
-    asm("cmpne r7,#9");
-    asm("cmpne r7,#11");
-    asm("moveq r0,#2");
-    asm("moveq r2,#5");
-    asm("beq handle_room_y");
-    asm("cmp r7,#1");
-    asm("cmpne r7,#12");
-    asm("moveq r0,#8");
-    asm("moveq r2,#11");
-    asm("beq handle_room_y");
-    asm("cmp r7,#2");
-    asm("cmpne r7,#13");
-    asm("moveq r0,#12");
-    asm("moveq r2,#15");
-    asm("beq handle_room_y");
-    asm("cmp r7,#3");
-    asm("cmpne r7,#14");
-    asm("moveq r0,#16");
-    asm("moveq r2,#19");
-    asm("beq handle_room_y");
-    asm("mov r0,#22");
-    asm("mov r2,#25");
-    asm("handle_room_y:");
-    asm("cmp r7,#4");
-    asm("movle r1,#2");
-    asm("movle r3,#5");
-    asm("ble actually_make_room");
-    asm("cmp r7,#6");
-    asm("movle r1,#8");
-    asm("movle r3,#11");
-    asm("ble actually_make_room");
-    asm("cmp r7,#8");
-    asm("movle r1,#12");
-    asm("movle r3,#15");
-    asm("ble actually_make_room");
-    asm("cmp r7,#10");
-    asm("movle r1,#16");
-    asm("movle r3,#19");
-    asm("ble actually_make_room");
-    asm("mov r1,#22");
-    asm("mov r3,#25");
-    asm("actually_make_room:");
-    asm("strb r8,[sp,#0x0]");
-    asm("str r9,[sp,#0x4]");
-    asm("mov r12,#0");
-    asm("strb r12,[sp,#0x8]"); // Force no room imperfections.
-    asm("bl CreateRoomInCell");
-    asm("add r8,r8,#1");
-    asm("add r9,r9,#0x1E"); // DUNGEON_GRID_CELL_BYTES
-    asm("cmp r8,r10");
-    asm("blt create_rooms_loop");
-    asm("ldr r7,=FLOOR_GENERATION_STATUS");
-    asm("add r0,sp,#0x80");
-    asm("ldrsh r3,[r7,#0x10]");
-    asm("mov r1,#0x1");
-    asm("mov r2,r10");
-    asm("bl GenerateMonsterHouse");
-    asm("ldrb r3,[r4,#0x13]");
-    asm("add r0,sp,#0x80");
-    asm("mov r1,#0x1");
-    asm("mov r2,r10");
-    asm("bl GenerateExtraHallways");
-    asm("add r0,sp,#0x80");
-    asm("mov r1,#0x1");
-    asm("mov r2,r10");
-    asm("bl GenerateSecondaryStructures");
-    asm("add sp,sp,#0xAE0");
-    asm("add sp,sp,#0x1000");
-    asm("ldmia sp!,{r3,r4,r5,r6,r7,r8,r9,r10,r11,pc}");
+    const uint8_t room_positions[2][16] = {
+        {2, 8, 12, 16, 22, 2, 22, 2, 22, 2, 22, 2, 8, 12, 16, 22},
+        {2, 2, 2, 2, 2, 8, 8, 12, 12, 16, 16, 22, 22, 22, 22, 22}
+    };
+    int start_x, end_x, start_y, end_y;
+    for (int i = 0; i < room_density; i++) {
+        uint8_t room_id = room_assignments[i];
+        start_x = room_positions[HB_X_POS][room_id];
+        end_x = start_x + 3;
+        start_y = room_positions[HB_Y_POS][room_id];
+        end_y = start_y + 3;
+        CreateRoomInCell(start_x, start_y, end_x, end_y, i, &grid[i], floor_props->room_flags);
+    }
+    
+    // Normal dungeon generation... kinda. Maze rooms and kecleon shops will
+    // fail to spawn because of the size of the rooms. So skip those.
+    // GenerateMazeRoom(grid, 1, 5, floor_props->maze_room_chance);
+    // GenerateKecleonShop(grid, 1, 5, floor_props->kecleon_shop_spawn_chance);
+    GenerateMonsterHouse(grid, 1, room_density, floor_props->monster_house_spawn_chance);
+    GenerateExtraHallways(grid, 1, room_density, floor_props->extra_hallways);
+    GenerateSecondaryStructures(grid, 1, room_density);
 }
 
 /* The original assembly version of this function has been left in the
@@ -2457,25 +2674,25 @@ void GenerateMiniSpiralFloor(struct floor_properties *floor_props) {
     // Create the hallway connecting the center room to the outer rooms.
     bool vertical;
     int target_x, target_y, source_x, source_y;
-    if (spiral_connector_location == 0) {
+    if (0 == spiral_connector_location) {
         target_x = DungeonRandRange(room_0->start_x, room_0->end_x);
         target_y = DungeonRandRange(room_0->start_y, room_0->end_y);
         source_x = DungeonRandRange(room_center->start_x, room_center->end_x);
         source_y = room_center->start_y;
         vertical = false;
-    } else if (spiral_connector_location == 1) {
+    } else if (1 == spiral_connector_location) {
         target_x = DungeonRandRange(room_3->start_x, room_3->end_x);
         target_y = DungeonRandRange(room_3->start_y, room_3->end_y);
         source_x = DungeonRandRange(room_center->start_x, room_center->end_x);
         source_y = room_center->end_y;
         vertical = false;
-    } else if (spiral_connector_location == 2) {
+    } else if (2 == spiral_connector_location) {
         target_x = DungeonRandRange(room_1->start_x, room_1->end_x);
         target_y = DungeonRandRange(room_1->start_y, room_1->end_y);
         source_x = room_center->start_x;
         source_y = DungeonRandRange(room_center->start_y, room_center->end_y);
         vertical = true;
-    } else {
+    } else { // (3 == spiral_connector_location) {
         target_x = DungeonRandRange(room_2->start_x, room_2->end_x);
         target_y = DungeonRandRange(room_2->start_y, room_2->end_y);
         source_x = room_center->end_x;
@@ -2688,7 +2905,7 @@ void GenerateFourCornerFloor(struct floor_properties *floor_props) {
     
     // Generate the rooms.
     int room_size = DungeonRandRange(5, 13);
-    if (room_size < 12) {
+    if (12 > room_size) {
         room_size |= 0x1;  // Make odd with bias
     }
     CreateRoomInCell(14, 2, 14 + room_size, 2 + room_size, 0, &grid[0], floor_props->room_flags);
@@ -2867,33 +3084,34 @@ void GenerateHollowPlusFloor(struct floor_properties *floor_props) {
     InitDungeonGrid(grid, 4, 4);
 
     // Create the rooms.
-    grid[0 * HB_GRID_COLS + 0].is_invalid = true;  // (0,0) Invalidate the four corner cells.
-    grid[0 * HB_GRID_COLS + 3].is_invalid = true;  // (0,3)
+    // Invalidate the four corner cells.
+    grid[0 * HB_GRID_COLS + 0].is_invalid = true; // (0,0)
+    grid[0 * HB_GRID_COLS + 3].is_invalid = true; // (0,3)
     grid[3 * HB_GRID_COLS + 0].is_invalid = true; // (3,0)
     grid[3 * HB_GRID_COLS + 3].is_invalid = true; // (3,3)
     // Mark side cells as rooms
-    grid[0 * HB_GRID_COLS + 1].is_room = true;  // (0,1) Mark the edges (that aren't the corner
-    grid[1 * HB_GRID_COLS + 0].is_room = true;  // (1,0) cells) as rooms.
-    grid[2 * HB_GRID_COLS + 0].is_room = true;  // (2,0)
+    grid[0 * HB_GRID_COLS + 1].is_room = true; // (0,1) Mark the edges (that
+    grid[1 * HB_GRID_COLS + 0].is_room = true; // (1,0) aren't the corner
+    grid[2 * HB_GRID_COLS + 0].is_room = true; // (2,0) cells as rooms.
     grid[3 * HB_GRID_COLS + 1].is_room = true; // (3,1)
-    grid[0 * HB_GRID_COLS + 2].is_room = true;  // (0,2)
-    grid[1 * HB_GRID_COLS + 3].is_room = true;  // (1,3)
+    grid[0 * HB_GRID_COLS + 2].is_room = true; // (0,2)
+    grid[1 * HB_GRID_COLS + 3].is_room = true; // (1,3)
     grid[3 * HB_GRID_COLS + 2].is_room = true; // (3,2)
     grid[2 * HB_GRID_COLS + 3].is_room = true; // (2,3)
-    grid[1 * HB_GRID_COLS + 1].is_room = false; // (1,1) Mark the four center cells as anchors.
-    grid[1 * HB_GRID_COLS + 2].is_room = false; // (1,2)
+    grid[1 * HB_GRID_COLS + 1].is_room = false; // (1,1) Mark the four center
+    grid[1 * HB_GRID_COLS + 2].is_room = false; // (1,2) cells as anchors.
     grid[2 * HB_GRID_COLS + 1].is_room = false; // (2,1)
-    grid[2 * HB_GRID_COLS + 2].is_room = false;// (2,2)
+    grid[2 * HB_GRID_COLS + 2].is_room = false; // (2,2)
     CreateRoomsAndAnchors(grid, 4, 4, start_pos_x, start_pos_y, floor_props->room_flags);
 
     // Create the hallways.
     grid[1 * HB_GRID_COLS + 1].is_connected_to_left = true;   // (1,1)
     grid[1 * HB_GRID_COLS + 1].is_connected_to_top = true;
-    grid[2 * HB_GRID_COLS + 1].is_connected_to_right = true;   // (2,1)
+    grid[2 * HB_GRID_COLS + 1].is_connected_to_right = true;  // (2,1)
     grid[2 * HB_GRID_COLS + 1].is_connected_to_top = true;
-    grid[1 * HB_GRID_COLS + 2].is_connected_to_left = true;    // (1,2)
+    grid[1 * HB_GRID_COLS + 2].is_connected_to_left = true;   // (1,2)
     grid[1 * HB_GRID_COLS + 2].is_connected_to_bottom = true;
-    grid[2 * HB_GRID_COLS + 2].is_connected_to_right = true;   // (2,2)
+    grid[2 * HB_GRID_COLS + 2].is_connected_to_right = true;  // (2,2)
     grid[2 * HB_GRID_COLS + 2].is_connected_to_bottom = true;
     CreateGridCellConnections(grid, 4, 4, start_pos_x, start_pos_y, true);
 
@@ -2912,4 +3130,157 @@ void GenerateHollowPlusFloor(struct floor_properties *floor_props) {
     GenerateExtraHallways(grid, 4, 4, floor_props->extra_hallways);
     GenerateRoomImperfections(grid, 4, 4);
     GenerateSecondaryStructures(grid, 4, 4);
+}
+
+/* The original assembly version of this function has been left in the
+// codebase for reference, but it has been rewritten in C.
+GenerateHorizontalBeetleFloor:
+    stmdb sp!,{r3,r4,r5,r6,r7,lr}
+    sub sp,sp,#0xAE0
+    sub sp,sp,#0x1000
+    mov r6,r2 ; r6 = param_0 (Floor Properties)
+    ; CUSTOM GRID POSITIONS
+    mov r0,#0xB ; 11 (x)
+    mov r1,#0x16 ; 22 (x)
+    mov r2,#0x22 ; 34 (x)
+    mov r3,#0x2D ; 45 (x)
+    mov r4,#0x0 ; 0 (y)
+    mov r5,#0xA ; 10 (y)
+    mov r7,#0x15 ; 21 (y)
+    mov r12,#0x1F ; 31 (y)
+    str r0,[sp,#0x44]
+    str r1,[sp,#0x48]
+    str r2,[sp,#0x4C]
+    str r3,[sp,#0x50]
+    str r4,[sp,#0x8]
+    str r5,[sp,#0xC]
+    str r7,[sp,#0x10]
+    str r12,[sp,#0x14]
+    ; CUSTOM GRID POSITIONS
+    add r0,sp,#0x80
+    mov r1,#0x3
+    mov r2,#0x3
+    bl InitDungeonGrid
+    ; CUSTOM ROOM ASSIGNMENTS
+    mov r5,#0x1 ; It's more effort to loop for 9 rooms.
+    add r4,sp,#0x80 ; Just calculate the offsets beforehand.
+    add r7,r4,#0xFE
+    strb r5,[r4,#0xA] ; (0,0) 0xA = 0x00A
+    strb r5,[r4,#0x28] ; (0,1) 0x1E + 0xA = 0x028
+    strb r5,[r4,#0x46] ; (0,2) 0x3C + 0xA = 0x046
+    strb r5,[r4,#0x1CC] ; (1,0) 0x1C2 + 0xA = 0x1CC
+    strb r5,[r7,#0xEC] ; (1,1) 0x1C2 + 0x1E + 0xA = 0x1EA
+    strb r5,[r4,#0x208] ; (1,2) 0x1C2 + 0x3C + 0xA = 0x208
+    strb r5,[r7,#0x290] ; (2,0) 0x384 + 0xA = 0x38E
+    strb r5,[r4,#0x3AC] ; (2,1) 0x384 + 0x1E + 0xA = 0x3AC
+    strb r5,[r7,#0x2CC] ; (2,2) 0x384 + 0x3C + 0xA = 0x3CA
+    ; CUSTOM ROOM ASSIGNMENTS
+    add r1,sp,#0x8
+    str r1,[sp,#0x0]
+    ldrb r3,[r6,#0xD]
+    add r0,sp,#0x80
+    mov r1,#0x3
+    str r3,[sp,#0x4]
+    mov r2,#0x3
+    add r3,sp,#0x44
+    bl CreateRoomsAndAnchors
+    ; CUSTOM CONNECTION ASSIGNMENTS
+    add r7,r7,#0xD5
+    strb r5,[r4,#0x14] ; (0,0) 0x14 = 0x014
+    strb r5,[r7,#0x3] ; (1,0) 0x1C2 + 0x14 = 0x1D6
+    strb r5,[r4,#0x398] ; (2,0) 0x384 + 0x14 = 0x398
+    strb r5,[r4,#0x4F] ; (0,2) 0x3C + 0x13 = 0x04F
+    strb r5,[r7,#0x3E] ; (1,2) 0x1C2 + 0x3C + 0x13 = 0x211
+    strb r5,[r7,#0x200] ; (2,2) 0x384 + 0x3C + 0x13 = 0x3D3
+    ; CUSTOM CONNECTION ASSIGNMENTS
+    add r1,sp,#0x8
+    str r1,[sp,#0x0]
+    mov r0,#0x1 ; Modified, DISABLE ROOM MERGING
+    str r0,[sp,#0x4]
+    add r0,sp,#0x80
+    mov r1,#0x3
+    mov r2,#0x3
+    add r3,sp,#0x44
+    bl CreateGridCellConnections
+    ; CUSTOM ROOM MERGING
+    mov r0,#0x0
+    mov r1,#0x1
+    mov r2,#0x1
+    add r3,sp,#0x80
+    bl MergeRoomsHorizontally
+    mov r0,#0x0
+    mov r1,#0x1
+    mov r2,#0x2
+    add r3,sp,#0x80
+    bl MergeRoomsHorizontally
+    ; CUSTOM ROOM MERGING
+    ldrb r3,[r6,#0x9] ; Once again, I have removed EnsureConnectedGrid
+    add r0,sp,#0x80 ; Since we connected the cells ourselves, it's
+    mov r1,#0x3 ; already known to be all connected.
+    mov r2,#0x3
+    bl GenerateMazeRoom
+    ldr r7,=FLOOR_GENERATION_STATUS
+    add r0,sp,#0x80
+    ldrsh r3,[r7,#0xC]
+    mov r1,#0x3
+    mov r2,#0x3
+    bl GenerateKecleonShop
+    add r0,sp,#0x80
+    ldrsh r3,[r7,#0x10]
+    mov r1,#0x3
+    mov r2,#0x3
+    bl GenerateMonsterHouse
+    ldrb r3,[r6,#0x13]
+    add r0,sp,#0x80
+    mov r1,#0x3
+    mov r2,#0x3
+    bl GenerateExtraHallways
+    add r0,sp,#0x80
+    mov r1,#0x3
+    mov r2,#0x3
+    bl GenerateRoomImperfections
+    add r0,sp,#0x80
+    mov r1,#0x3
+    mov r2,#0x3
+    bl GenerateSecondaryStructures
+    add sp,sp,#0xAE0
+    add sp,sp,#0x1000
+    ldmia sp!,{r3,r4,r5,r6,r7,pc} */
+void GenerateHorizontalBeetleFloor(struct floor_properties *floor_props) {
+    // Setup the grid.
+    struct dungeon_grid_cell grid[3 * HB_GRID_COLS];
+    // InitDungeonGrid has a check for the floor size and can ignore the size
+    // of the arguments passed for certain sizes... so we must override it for
+    // safety reasons to avoid a crash in case the user overwrites the small
+    // or medium standard floor layouts with this layout.
+    FLOOR_GENERATION_STATUS_PTR->floor_size.val = FLOOR_SIZE_LARGE;
+    InitDungeonGrid(grid, 3, 3);
+    int grid_starts_x[4] = {8, 21, 34, 47};
+    int grid_starts_y[4] = {0, 10, 21, 32};
+    // Create the rooms.
+    for (int x = 0; 3 > x; ++x) {
+        for (int y = 0; 3 > y; ++y) {
+            grid[x * HB_GRID_COLS + y].is_room = true;
+        }
+    }
+    CreateRoomsAndAnchors(grid, 3, 3, grid_starts_x, grid_starts_y, floor_props->room_flags);
+    
+    // Create the hallways.
+    for (int x = 0; 3 > x; ++x) {
+        grid[x * HB_GRID_COLS + 0].is_connected_to_bottom = true;
+        grid[x * HB_GRID_COLS + 2].is_connected_to_top = true;
+    }
+    CreateGridCellConnections(grid, 3, 3, grid_starts_x, grid_starts_y, true);
+    
+    // Merge middle rooms to make the 'body' of the beetle.
+    MergeRoomsHorizontally(0, 1, 1, grid);
+    MergeRoomsHorizontally(0, 1, 2, grid);
+    
+    // Normal dungeon generation.
+    GenerateMazeRoom(grid, 3, 3, floor_props->maze_room_chance);
+    GenerateKecleonShop(grid, 3, 3, floor_props->kecleon_shop_spawn_chance);
+    GenerateMonsterHouse(grid, 3, 3, floor_props->monster_house_spawn_chance);
+    GenerateExtraHallways(grid, 3, 3, floor_props->extra_hallways);
+    GenerateRoomImperfections(grid, 3, 3);
+    GenerateSecondaryStructures(grid, 3, 3);
 }

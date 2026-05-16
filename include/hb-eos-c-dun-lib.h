@@ -74,14 +74,32 @@ void MergeRoomsHorizontally(int16_t x, int16_t y, int16_t dx, struct dungeon_gri
 
 void CreateRoomInCell(int16_t x0, int16_t y0, int16_t x1, int16_t x2, uint8_t room_id, struct dungeon_grid_cell *cell, struct room_flags flags);
 
+void GenerateBinaryTreeMaze(const int16_t x0, const int16_t y0, const int16_t x1, const int16_t y1, enum direction_id dir);
+
+void GenerateSidewinderMaze(const int16_t x0, const int16_t y0, const int16_t x1, const int16_t y1, enum direction_id dir, const int32_t weight);
+
+void GenerateHuntAndKillMaze(const int16_t x0, const int16_t y0, const int16_t x1, const int16_t y1, struct abstract_floor *abs_floor);
+
 void GenerateRecursiveBacktrackingFloor(struct floor_properties *floor_props);
 
 void GenerateBinaryTreeMaze(const int16_t x0, const int16_t y0, const int16_t x1, const int16_t y1, enum direction_id dir);
 
 void GenerateBinaryTreeFloor(struct floor_properties *floor_props, bool easy_solution);
 
-void GenerateSidewinderMaze(const int16_t x0, const int16_t y0, const int16_t x1, const int16_t y1, enum direction_id dir, const int32_t weight);
-
 void GenerateSidewinderFloor(struct floor_properties *floor_props, bool hard_solution);
+
+void GenerateCenterMazeFloor(struct floor_properties *floor_props);
+
+void GeneratePSMDMazeFloor(struct floor_properties *floor_props);
+
+void GenerateHamiltonianCycleFloor(struct floor_properties *floor_props);
+
+void GenerateMiniSpiralFloor(struct floor_properties *floor_props);
+
+void GenerateFourCornerFloor(struct floor_properties *floor_props);
+
+void GenerateHollowPlusFloor(struct floor_properties *floor_props);
+
+void GenerateHorizontalBeetleFloor(struct floor_properties *floor_props);
 
 #endif

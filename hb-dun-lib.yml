@@ -121,16 +121,6 @@ hb-dun-lib:
           r1: y grid coordinate of the upper room
           r2: dx, where the second room has a x grid coordinate of x+dx
           r3: grid to update
-      - name: GenerateRecursiveBacktrackingFloor
-        description: |-
-          Generates a recursive backtracking maze across the floor and places 4-15 3x3 rooms (depending on room
-          density). Note: GenerateRecursiveBacktrackingMaze uses a lot of stack space and can cause a stack overflow.
-          It has been tested within this function (and uses a little stack trick). Because of this issue, the
-          GenerateRecursiveBacktrackingMaze function has been hidden from the users of this library. If the function
-          is desired to be used (despite its flaws), view the library source code and extract the function.
-          Written in Assembly.
-          
-          r0: floor_properties
       - name: GenerateBinaryTreeMaze
         description: |-
           Generates a binary tree maze in the area defined by (x0, y0) -> [x1, y1] with a bias for the diagonal
@@ -142,18 +132,16 @@ hb-dun-lib:
           r2: x1
           r3: y1
           sp+0x0: direction (expected to be diagonal; however, if not uses a random adjacent diagonal direction)
-      - name: GenerateBinaryTreeFloor
+- name: GenerateHuntAndKillMaze
         description: |-
-          Generates a binary tree maze at (7, 7) -> [24, 24] using a random diagonal direction. Then, it adds a 3x3
-          spawn room in the directional bias corner, two rooms (one for each adjacet cardinal direction), and a 3x3
-          room for the stairs in the corner opposite of the bias. If easy solution is true, the stair location and
-          team spawn location is flipped around (making reaching the stairs significantly easier).
+          Generates a maze using the hunt and kill algorithm between (x0, y0) -> [x1, y1]. Uses
+          abstract_tile.custom_tile_info to track which parts have been added already.
           
           r0: x0
           r1: y0
           r2: x1
           r3: y1
-          sp+0x0: bool easy_solution
+          sp+0x0: abstract_floor ptr
       - name: GenerateSidewinderMaze
         description: |-
           Generates a sidewinder maze in the area defined by (x0, y0) -> [x1, y1] with a bias for the cardinal
@@ -165,14 +153,69 @@ hb-dun-lib:
           r2: x1
           r3: y1
           sp+0x0: direction (expected to be cardinal; however, if not uses a random adjacent cardinal)
+      - name: GenerateRecursiveBacktrackingFloor
+        description: |-
+          Generates a recursive backtracking maze across the floor and places 4-15 3x3 rooms (depending on room
+          density). Note: GenerateRecursiveBacktrackingMaze uses a lot of stack space and can cause a stack overflow.
+          It has been tested within this function (and uses a little stack trick). Because of this issue, the
+          GenerateRecursiveBacktrackingMaze function has been hidden from the users of this library. If the function
+          is desired to be used (despite its flaws), view the library source code and extract the function.
+          Written in Assembly.
+          
+          r0: floor_properties
+      - name: GenerateBinaryTreeFloor
+        description: |-
+          Generates a binary tree maze at (7, 7) -> [24, 24] using a random diagonal direction. Then, it adds a 3x3
+          spawn room in the directional bias corner, two rooms (one for each adjacet cardinal direction), and a 3x3
+          room for the stairs in the corner opposite of the bias. If easy solution is true, the stair location and
+          team spawn location is flipped around (making reaching the stairs significantly easier).
+          
+          r0: floor_properties ptr
+          r1: easy solution (bool)
       - name: GenerateSidewinderFloor
         description: |-
           Generates a sidewinder maze and places two rooms along the axis of the randomly selected cardinal direction.
           The player is forced to spawn on one side and the stairs on the other side. If hard solution is true, the
           stair location and team spawn location is flipped around (making reachint the stairs significantly harder).
           
-          r0: x0
-          r1: y0
-          r2: x1
-          r3: y1
-          sp+0x0: bool hard_solution
+          r0: floor_properties ptr
+          r1: hard solution (bool)
+      - name: GenerateCenterMazeFLoor
+        description: |-
+          Generates four rooms in a square layout and creates a maze to connect all of the rooms. The team and stairs
+          are forced to spawn in opposite rooms digonally.
+          
+          r0: floor_properties ptr
+      - name: GeneratePSMDMazeFLoor
+        description: |-
+          Places two rooms in the middle of the floor that the team and stairs are forced to spawn in. After, a
+          a variable numbers are added along with a variable number of donuts/rings. Finally, a maze is spread out
+          across the entire floor.
+          
+          r0: floor_properties ptr
+      - name: GenerateHamiltonianCycleFloor
+        description: |-
+          Creates a cycle pathway and places a variable number of 3x3 rooms along the sides.
+          
+          r0: floor_properties ptr
+      - name: GenerateMiniSpiralFloor
+        description: |-
+          Generates 5 rooms in total with four in the corners and one in the center. They are then connected in a
+          spiral-like order.
+          
+          r0: floor_properties ptr
+      - name: GenerateFourCorner
+        description: |-
+          Generates 4 rooms in the corners and connects them using a single hallway to create a perfect square.
+          
+          r0: floor_properties ptr
+      - name: GenerateHollowPlusFloor
+        description: |-
+          Generates a plus-shaped floor with a room in each cardinal direction with L shaped connections.
+          
+          r0: floor_properties ptr
+      - name: GenerateHorizontalBeetleFloor
+        description: |-
+          Generates a bettle-like layout (like vanilla) except in the horizontal direction instead of vertical.
+          
+          r0: floor_properties ptr
